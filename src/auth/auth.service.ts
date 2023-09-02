@@ -7,6 +7,7 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '../errors';
 import { User } from '@prisma/client';
+import { TokenData } from './interfaces/tokenData.interface';
 
 @Injectable()
 export class AuthService {
@@ -53,7 +54,7 @@ export class AuthService {
     return { accessToken };
   }
 
-  checkToken(token: string) {
+  checkToken(token: string): TokenData {
     const data = this.jwtService.verify(token, {
       audience: this.TOKEN_AUDIENCE,
       issuer: this.TOKEN_ISSUER,
