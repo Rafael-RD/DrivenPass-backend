@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ConflictException, NotFoundException } from '../errors';
 import * as bcrypt from 'bcrypt';
+import { User } from '@prisma/client';
+import { EraseUserDto } from './dto/erase-user.dto';
 
 @Injectable()
 export class UserService {
@@ -39,7 +41,14 @@ export class UserService {
     return await this.userRepository.updateUser(id, data);
   }
 
-  async deleteUser(id: number) {
-    return await this.userRepository.deleteUser(id);
+  async deleteUser(eraseUserDto: EraseUserDto, user: User) {
+    const userExists = await this.userRepository.findUserById(user.id);
+    if (userExists === null) throw new NotFoundException('User not found');
+
+    const passwordMatch = bcrypt.compareSync(eraseUserDto.password, userExists.password);
+    if (!passwordMatch) throw new UnauthorizedException('Password does not match');
+
+    const deletedUser = await this.userRepository.deleteUser(user.id);
+    return deletedUser;
   }
 }
