@@ -57,6 +57,7 @@ export class CardsService {
     if (updateCardDto.cvv !== undefined) updateCardDto.cvv = this.cryptr.encrypt(updateCardDto.cvv);
     if (updateCardDto.password !== undefined) updateCardDto.password = this.cryptr.encrypt(updateCardDto.password);
     const updatedCard = await this.notesRepository.updateCard(id, updateCardDto);
+    return updatedCard;
   }
 
   async remove(id: number, user: User) {
