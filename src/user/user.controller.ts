@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { UserLocals } from '../decorators';
@@ -12,6 +12,7 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Post('erase')
+  @HttpCode(200)
   erase(@Body() eraseUserDto: EraseUserDto, @UserLocals() user: User) {
     return this.userService.deleteUser(eraseUserDto, user);
   }
