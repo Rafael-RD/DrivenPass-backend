@@ -19,7 +19,7 @@
     "test:watch": "npm run load-envs:test -- jest --watch",
     "test:cov": "npm run load-envs:test -- jest --coverage",
     "test:debug": "npm run load-envs:test -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "npm run load-envs:test -- jest --runInBand --config ./test/jest-e2e.json"
+    "test:e2e": "npm run load-envs:test -- jest -- --runInBand --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
